@@ -103,7 +103,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="새 메모" id="um0-92-RfN">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="BsL-Uu-p68"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="BsL-Uu-p68">
+                            <connections>
+                                <action selector="close:" destination="88U-RR-QjO" id="c8y-g8-2Ae"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="ia4-IE-fdA"/>
                     </navigationItem>
                 </viewController>
