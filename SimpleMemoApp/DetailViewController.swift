@@ -9,6 +9,16 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
+    // 메모 공유 함수
+    @IBAction func share(_ sender: Any) {
+        
+        guard let memo = memo?.content else { return }
+        
+        let vc = UIActivityViewController(activityItems: [memo], applicationActivities: nil)
+        
+        present(vc, animated: true, completion: nil)
+    }
+    
     @IBAction func deleteMemo(_ sender: Any) {
         let alert = UIAlertController(title: "삭제 확인", message: "메모를 삭제하시겠습니까?", preferredStyle: .alert)
         
@@ -24,6 +34,9 @@ class DetailViewController: UIViewController {
         alert.addAction(cancelAction)
         present(alert, animated: true, completion: nil)
     }
+    
+    
+    
     @IBOutlet weak var memoTableView: UITableView!
     
     // 이전 화면에서 갖고오는 메모 데이터
