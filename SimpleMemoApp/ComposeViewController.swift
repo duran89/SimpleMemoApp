@@ -9,6 +9,11 @@ import UIKit
 
 class ComposeViewController: UIViewController {
     
+    // 네비게이션컨트롤러를 지나서 전달하기 위한 변수 
+    var editTraget: Memo?
+    
+    // 편집 취소 관련된 변수
+    var originalMemoContent: String?
     
     @IBAction func close(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -26,12 +31,19 @@ class ComposeViewController: UIViewController {
 //        let newMemo = Memo(content: memo)
 //        Memo.dummyMemoList.append(newMemo)
         
-        // 코어데이터를 이용해 저장하는 함수 호출 
-        DataManager.shared.addNewMemo(memo)
-        
+        // 새 메모 화면을 공유함에 따라 코드 수정
+        if let target = editTraget {
+            target.content = memo
+            DataManager.shared.saveContext()
+            NotificationCenter.default.post(name: ComposeViewController.memodidChange, object: nil)
+            
+        } else {
+            // 코어데이터를 이용해 저장하는 함수 호출
+            DataManager.shared.addNewMemo(memo)
+            NotificationCenter.default.post(name: ComposeViewController.newMemoDidInsert, object: nil)
+        }
         // 방송 시작
-        NotificationCenter.default.post(name: ComposeViewController.newMemoDidInsert, object: nil)
-        
+       
         dismiss(animated: true, completion: nil)
     }
     
@@ -39,7 +51,30 @@ class ComposeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        if let memo = editTraget {
+            navigationItem.title = "메모 편집"
+            memoTextView.text = memo.content
+            originalMemoContent = memo.content
+        } else {
+            navigationItem.title = "새 메모"
+            memoTextView.text = ""
+        }
+        
+        memoTextView.delegate = self
+    }
+    
+    /*
+     화면이 나타나기 직전에 delegate 가 되었다가, 화면이 꺼지기 전에 사라진다.
+     */
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.presentationController?.delegate = self
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.presentationController?.delegate = nil
     }
     
 
@@ -61,6 +96,38 @@ class ComposeViewController: UIViewController {
  notification 이 호출되는 시점에 테이블 뷰 리로드하고 새 데이터 저장
  */
 
+extension ComposeViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        if let original = originalMemoContent, let edited = textView.text {
+            if #available(iOS 13.0, *) {
+                isModalInPresentation = original != edited
+            } else {
+                
+            }
+        }
+    }
+}
+
+// 내용을 저장하지 않고 그냥 내리면 아래 메소드가 호출된다.
+// 내용을 편집만 하고 시트를 그냥 내리려고 하면 시트가 내려가지 않는다.
+extension ComposeViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        let alert = UIAlertController(title: "알림", message: "편집한 내용을 저장할까요?", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "확인", style: .default) { [weak self] (action) in  self?.save(action)}
+        alert.addAction(okAction)
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel) {
+            [weak self] (action) in self?.close(action)
+        }
+        
+        alert.addAction(cancelAction)
+        present(alert, animated: true, completion: nil)
+    }
+}
+
+
 extension ComposeViewController {
     static let newMemoDidInsert = Notification.Name(rawValue: "newMemoDidInsert")
+    static let memodidChange = Notification.Name(rawValue: "memoDidChange")
 }
