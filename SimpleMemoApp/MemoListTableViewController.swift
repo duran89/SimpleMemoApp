@@ -9,6 +9,7 @@ import UIKit
 
 class MemoListTableViewController: UITableViewController {
     
+    
     let formatter: DateFormatter = {
         let f = DateFormatter()
         f.dateStyle = .long
@@ -20,6 +21,11 @@ class MemoListTableViewController: UITableViewController {
     // viewWillAppear는 화면이 보이기 직전마다 실행된다.
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // 화면이 보이기 직전에 fetctMemo 함수를 통해 배열을 채우고
+        // reloadData()를 통해 새로고침을 한다. 
+        DataManager.shared.fetchMemo()
+        tableView.reloadData()
         
 // 테이블뷰 새로고침 같은 것 (sheet 방식이 fullScreen 일 떄 가능)
 //        tableView.reloadData()
@@ -38,7 +44,7 @@ class MemoListTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let cell = sender as? UITableViewCell, let indexPath = tableView.indexPath(for: cell) {
             if let vc = segue.destination as? DetailViewController {
-                vc.memo = Memo.dummyMemoList[indexPath.row]
+                vc.memo = DataManager.shared.memoList[indexPath.row]
             }
         }
     }
@@ -72,16 +78,16 @@ class MemoListTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return Memo.dummyMemoList.count
+        return DataManager.shared.memoList.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
 
-        let target = Memo.dummyMemoList[indexPath.row]
+        let target = DataManager.shared.memoList[indexPath.row]
         cell.textLabel?.text = target.content
-        cell.detailTextLabel?.text =  formatter.string(from: target.insertDate)
+        cell.detailTextLabel?.text =  formatter.string(for: target.insertDate)
 
         return cell
     }
