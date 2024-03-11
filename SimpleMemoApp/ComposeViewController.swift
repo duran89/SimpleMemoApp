@@ -47,6 +47,20 @@ class ComposeViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    // 키보드 노티피케이션을 위한 토큰
+    var willShowToken: NSObjectProtocol?
+    var willHideToken: NSObjectProtocol?
+    
+    // 화면에 제거되는 시점에 토큰 해제
+    deinit {
+        if let token = willShowToken {
+            NotificationCenter.default.removeObserver(token)
+        }
+        
+        if let token = willHideToken {
+            NotificationCenter.default.removeObserver(token)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +75,32 @@ class ComposeViewController: UIViewController {
         }
         
         memoTextView.delegate = self
+        
+        
+        willShowToken = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: OperationQueue.main, using: { [weak self] (noti) in
+            // 키보드 높이 만큼 여백을 추가해야 함 (고정된 값 사용 x)
+            guard let strongSelf = self else { return }
+            
+            // 키보드 높이 속성 저장
+            if let frame = noti.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue { let height = frame.cgRectValue.height
+                
+                // 여백
+                var inset = strongSelf.memoTextView.contentInset
+                
+                // 여백 바닥 부분의 높이를 키보드 높이로 할당
+                inset.bottom = height
+                strongSelf.memoTextView.contentInset = inset
+                
+                
+                // 추가로 스크롤에도 적용해야한다.
+                inset = strongSelf.memoTextView.verticalScrollIndicatorInsets
+                inset.bottom = height
+                strongSelf.memoTextView.scrollIndicatorInsets = inset
+                
+                
+            }
+            
+        })
     }
     
     /*
@@ -69,11 +109,17 @@ class ComposeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        // 화면이 열리자마자 키보드가 올라오게 하는 함수
+        memoTextView.becomeFirstResponder()
+
         navigationController?.presentationController?.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        // 화면이 닫히기 직전에 해제한다. (키보드가 내려간다.)
+        memoTextView.resignFirstResponder()
         navigationController?.presentationController?.delegate = nil
     }
     
