@@ -34,6 +34,15 @@ class MemoListTableViewController: UITableViewController {
         }
     }
     
+    // 세그웨이를 통해 데이터 전달할 때 사용
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let cell = sender as? UITableViewCell, let indexPath = tableView.indexPath(for: cell) {
+            if let vc = segue.destination as? DetailViewController {
+                vc.memo = Memo.dummyMemoList[indexPath.row]
+            }
+        }
+    }
+    
     // viewDidLoad()는 최초로 한 번만 실행된다.
     override func viewDidLoad() {
         super.viewDidLoad()
