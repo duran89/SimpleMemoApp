@@ -40,6 +40,24 @@ class DataManager {
         }
     }
     
+    // 데이터 저장하는 함수
+    func addNewMemo(_ memo: String?) {
+        
+        // 새로운 메모 인스턴스 생성 (이 때 "Memo"는 coredata를 통해 만든 것임
+        // 따라서 coredata를 사용해서 새로운 인스턴스를 만든다면 컨텍스트를 이용한다.
+        let newMemo = Memo(context: mainContext)
+        
+        newMemo.content = memo
+        newMemo.insertDate = Date()
+        
+        memoList.insert(newMemo, at: 0)
+        
+        /* 단순히 새로운 인스턴스를 만들었다고 저장되는게 아니다.
+         실제 데이터베이스에 만들려면 컨텍스트를 저자ㅣㅇ해야한다.
+         */
+        saveContext()
+    }
+    
     
     // MARK: - Core Data stack
 

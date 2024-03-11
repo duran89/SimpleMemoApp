@@ -26,6 +26,9 @@ class ComposeViewController: UIViewController {
 //        let newMemo = Memo(content: memo)
 //        Memo.dummyMemoList.append(newMemo)
         
+        // 코어데이터를 이용해 저장하는 함수 호출 
+        DataManager.shared.addNewMemo(memo)
+        
         // 방송 시작
         NotificationCenter.default.post(name: ComposeViewController.newMemoDidInsert, object: nil)
         
