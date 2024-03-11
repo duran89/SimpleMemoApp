@@ -9,6 +9,21 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
+    @IBAction func deleteMemo(_ sender: Any) {
+        let alert = UIAlertController(title: "삭제 확인", message: "메모를 삭제하시겠습니까?", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "삭제", style: .destructive) { [weak self] (action) in DataManager.shared.deleteMemo(self?.memo)
+            
+            // 메모 삭제 후 이전화면으로 목록화면으로 돌아가기 위함 
+            self?.navigationController?.popViewController(animated: true)
+        }
+        
+        alert.addAction(okAction)
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        present(alert, animated: true, completion: nil)
+    }
     @IBOutlet weak var memoTableView: UITableView!
     
     // 이전 화면에서 갖고오는 메모 데이터
