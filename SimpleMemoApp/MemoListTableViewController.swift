@@ -17,8 +17,33 @@ class MemoListTableViewController: UITableViewController {
         return f
     }()
 
+    // viewWillAppear는 화면이 보이기 직전마다 실행된다.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+// 테이블뷰 새로고침 같은 것 (sheet 방식이 fullScreen 일 떄 가능)
+//        tableView.reloadData()
+//        print(#function)
+    }
+    var token: NSObjectProtocol?
+    
+    // 노티피케이션 토큰 해제
+    deinit {
+        if let token = token {
+            NotificationCenter.default.removeObserver(token)
+        }
+    }
+    
+    // viewDidLoad()는 최초로 한 번만 실행된다.
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // 방송 접수
+        token =  NotificationCenter.default.addObserver(forName: ComposeViewController.newMemoDidInsert, object: nil, queue: OperationQueue.main) { [weak self] (noti) in
+            self?.tableView.reloadData()
+        }
+        
+        
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false

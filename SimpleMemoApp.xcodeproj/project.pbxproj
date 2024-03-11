@@ -16,6 +16,7 @@
 		AD09FA942B9E1B7500FC7A12 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD09FA932B9E1B7500FC7A12 /* Model.swift */; };
 		AD09FA962B9E1DA500FC7A12 /* MemoListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD09FA952B9E1DA500FC7A12 /* MemoListTableViewController.swift */; };
 		AD09FA982B9E277E00FC7A12 /* ComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD09FA972B9E277E00FC7A12 /* ComposeViewController.swift */; };
+		AD09FA9C2B9E29E800FC7A12 /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD09FA9B2B9E29E800FC7A12 /* UIViewController+Alert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		AD09FA932B9E1B7500FC7A12 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		AD09FA952B9E1DA500FC7A12 /* MemoListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListTableViewController.swift; sourceTree = "<group>"; };
 		AD09FA972B9E277E00FC7A12 /* ComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeViewController.swift; sourceTree = "<group>"; };
+		AD09FA9B2B9E29E800FC7A12 /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				AD09FA892B9E199600FC7A12 /* LaunchScreen.storyboard */,
 				AD09FA8C2B9E199600FC7A12 /* Info.plist */,
 				AD09FA842B9E199400FC7A12 /* SimpleMemoApp.xcdatamodeld */,
+				AD09FA9B2B9E29E800FC7A12 /* UIViewController+Alert.swift */,
 			);
 			path = SimpleMemoApp;
 			sourceTree = "<group>";
@@ -161,6 +164,7 @@
 				AD09FA982B9E277E00FC7A12 /* ComposeViewController.swift in Sources */,
 				AD09FA862B9E199400FC7A12 /* SimpleMemoApp.xcdatamodeld in Sources */,
 				AD09FA942B9E1B7500FC7A12 /* Model.swift in Sources */,
+				AD09FA9C2B9E29E800FC7A12 /* UIViewController+Alert.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
